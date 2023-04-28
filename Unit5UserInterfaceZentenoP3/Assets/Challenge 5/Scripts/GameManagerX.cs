@@ -9,12 +9,14 @@ public class GameManagerX : MonoBehaviour
 {
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI gameOverText;
+    public TextMeshProUGUI timerText;
     public GameObject titleScreen;
     public Button restartButton; 
 
     public List<GameObject> targetPrefabs;
 
     private int score;
+    public float timeValue;
     private float spawnRate = 1.5f;
     public bool isGameActive;
 
@@ -29,7 +31,9 @@ public class GameManagerX : MonoBehaviour
         isGameActive = true;
         StartCoroutine(SpawnTarget());
         score = 0;
+        timeValue = 60;
         UpdateScore(0);
+
         titleScreen.gameObject.SetActive(false);
     }
 
@@ -85,6 +89,24 @@ public class GameManagerX : MonoBehaviour
     public void RestartGame()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void Update()
+    {
+        if (isGameActive == true)
+        {
+            TimeLeft();
+        }
+        if (timeValue < 0)
+        {
+            GameOver();
+        }
+    }
+
+    public void TimeLeft()
+    {
+        timeValue -= Time.deltaTime;
+        timerText.text = "Time: " + Mathf.Round(timeValue);
     }
 
 }
